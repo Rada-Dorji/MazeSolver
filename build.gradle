@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.example'
+version = '1.0.0'
+
+repositories {
+    mavenCentral() // Fetch dependencies from Maven Central
+}
+
+dependencies {
+    // Add dependencies here, if needed
+    // Example: implementation 'org.some:dependency:version'
+}
+
+application {
+    mainClass = 'MazeSolver' // Replace with your main class's fully qualified name
+}
+
+// Task to create a fat JAR (optional if dependencies are used)
+task fatJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
